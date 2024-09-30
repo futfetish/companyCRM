@@ -7,6 +7,8 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import { db } from "~/server/db";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -38,17 +40,55 @@ export const authOptions: NextAuthOptions = {
   pages : {
     signIn : '/login'
   },
+  session : {
+    strategy : 'jwt'
+  },
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id; // Сохраните идентификатор пользователя в токене
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string; // Добавьте идентификатор пользователя в сессию
+      }
+      return session;
+    },
   },
   adapter: PrismaAdapter(db) as Adapter,
   providers: [
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        username: { label: "Username", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+
+        if(!credentials){
+          throw new Error()
+        }
+        const user = await db.user.findUnique({
+          where : {
+            name : credentials.username
+          }
+        })
+
+        if(!user){
+          throw new Error( 'name er' )
+        }
+
+        const isPasswordValid = await bcrypt.compare( credentials.password , user.password )
+
+        if(isPasswordValid){
+          return user
+        } else{
+          throw new Error( 'paswword er' )
+        }
+      },
+    }),
   ],
 };
 
