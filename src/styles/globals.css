@@ -99,3 +99,8 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+input {
+  @apply ring-0 !important;
+  @apply ring-offset-0 !important;
+}
