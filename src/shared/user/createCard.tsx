@@ -86,7 +86,6 @@ export const UserCreateCard: FC = () => {
                       className={cn(
                         form.formState.errors.username && "border-destructive",
                       )}
-                      placeholder="shadcn"
                       {...field}
                     />
                   </FormControl>
@@ -108,7 +107,6 @@ export const UserCreateCard: FC = () => {
                         form.formState.errors.password && "border-destructive",
                       )}
                       type="password"
-                      placeholder="shadcn"
                       {...field}
                     />
                   </FormControl>
