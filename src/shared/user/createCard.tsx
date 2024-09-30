@@ -121,7 +121,7 @@ export const UserCreateCard: FC = () => {
             </FormMessage>
             <Button
               disabled={
-                Object.keys(form.formState.errors).length > 0 || isPending
+                Object.keys(form.formState.errors).filter(key => key !== 'root').length  > 0 || isPending
               }
               className="w-[100%]"
               type="submit"
