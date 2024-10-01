@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from "~/shared/ui/form";
 import { Button } from "~/shared/ui/button";
-import { cn } from "../utils";
+import { cn } from "~/shared/utils";
 
 const formSchema = z.object({
   username: z
