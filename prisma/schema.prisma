@@ -14,20 +14,198 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model User {
-    email         String?   @unique
-    emailVerified DateTime?
-
-    id    String  @id @default(cuid())
-    name  String @unique
-    password String
-    image String?
-}
-
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model User {
+    email         String?   @unique
+    emailVerified DateTime?
+
+    id       String  @id @default(cuid())
+    name     String  @unique
+    password String
+    image    String?
+}
+
+model Experience {
+    id       Int    @id @default(autoincrement())
+    company  String
+    position String
+
+    countryId Int
+    country   Country @relation(fields: [countryId], references: [id])
+
+    regionId Int
+    region   region @relation(fields: [regionId], references: [id])
+
+    start DateTime
+    end   DateTime? //отсутствие = по настоящие время
+
+    responsibilities String
+
+    employeeId Int
+    employee   Employee @relation(fields: [employeeId], references: [id])
+}
+
+model Country {
+    id      Int      @id @default(autoincrement())
+    name    String
+    regions region[]
+
+    experiences Experience[]
+    Companies   Company[]
+}
+
+model region {
+    id      Int     @id @default(autoincrement())
+    name    String
+    country Country @relation(fields: [countryId], references: [id])
+
+    countryId Int
+
+    experiences Experience[]
+    Companies   Company[]
+}
+
+enum EducationLevel {
+    highSchool // Среднее образование
+    higherEducation // Высшее образование
+    bachelor // Бакалавр
+    master // Магистр
+}
+
+model Education {
+    id         Int            @id @default(autoincrement())
+    level      EducationLevel
+    name       String
+    faculty    String
+    speciality String
+
+    start DateTime
+    end   DateTime? //отсутствие = по настоящие время
+
+    employee   Employee @relation(fields: [employeeId], references: [id])
+    employeeId Int
+}
+
+enum EmploymentStatus {
+    fullDay // Полный день
+    partTime // На полставки
+    freelancer // Фрилансер
+    intern // Стажер
+    workingStudent // Работающий студент
+    night // Ночной
+    candidate // Кандидат
+    probation // Испытательный срок
+}
+
+enum EmploymentType {
+    staff // Штатный
+    piecework // Сдельный
+    candidate // Кандидат
+    archive // Архив
+    partner // Партнер
+    other // Другое
+}
+
+enum MaritalStatus {
+    notSpecified // Не указано
+    single // Холост
+    married // Женат
+    divorced // Разведен
+    widowed // Вдовец
+}
+
+enum DrivingLicense {
+    A // Категория A
+    B // Категория B
+    C // Категория C
+    D // Категория D
+    E // Категория E
+    noLicense // Нет
+}
+
+model Employee {
+    id       Int    @id @default(autoincrement())
+    fullName String
+    image    String
+
+    type EmploymentType
+
+    position  String
+    companyId Int
+    company   Company          @relation(fields: [companyId], references: [id])
+    status    EmploymentStatus
+
+    phone String
+    email String
+
+    maritalStatus MaritalStatus
+
+    CarOwnership   Boolean
+    drivingLicense DrivingLicense
+
+    hasDisability     Boolean
+    hasCriminalRecord Boolean
+    pensioner         Boolean
+    notAbroad         Boolean
+
+    disabilityDetails     String?
+    criminalRecordDetails String?
+
+    experience Experience[]
+
+    education Education[]
+}
+
+enum CompanyType {
+    myCompanies // Мои компании
+    partner // Партнер
+    client // Клиент
+    customer // Заказчик
+    archive // Архив
+    other // Другое
+}
+
+model WorkSchedule {
+    id        Int      @id @default(autoincrement())
+    sunday    Boolean // Воскресенье
+    monday    Boolean // Понедельник
+    tuesday   Boolean // Вторник
+    wednesday Boolean // Среда
+    thursday  Boolean // Четверг
+    friday    Boolean // Пятница
+    saturday  Boolean // Суббота
+    start     DateTime
+    end       DateTime
+
+    Companies Company[]
+}
+
+model Company {
+    id          Int         @id @default(autoincrement())
+    type        CompanyType
+    name        String
+    description String
+    image       String
+
+    workScheduleId Int
+    workSchedule   WorkSchedule @relation(fields: [workScheduleId], references: [id])
+
+    phone String
+    email String
+    site  String
+
+    countryId Int
+    country   Country @relation(fields: [countryId], references: [id])
+
+    regionId Int
+    region   region @relation(fields: [regionId], references: [id])
+
+    employees Employee[]
 }
