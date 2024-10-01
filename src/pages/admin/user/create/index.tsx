@@ -1,4 +1,4 @@
-import { UserCreateCard } from "~/shared/user/createCard";
+import { UserCreateCard } from "~/shared/components/user/createCard";
 import { cn } from "~/shared/utils";
 
 export default  function CreateUser(){

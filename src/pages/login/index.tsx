@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import { LoginCard } from "~/shared/auth/loginCard";
+import { LoginCard } from "~/shared/components/auth/loginCard";
 import { cn } from "~/shared/utils";
 
 export default function Login() {
