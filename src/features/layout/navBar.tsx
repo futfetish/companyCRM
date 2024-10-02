@@ -1,8 +1,5 @@
 import { FC, ReactNode } from "react";
 import { cn } from "~/shared/utils";
-import { User } from "lucide-react";
-import { Grid2X2 } from "lucide-react";
-import { Circle } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
