@@ -133,7 +133,7 @@ enum DrivingLicense {
 model Employee {
     id       Int    @id @default(autoincrement())
     fullName String
-    image    String
+    image    String @default("https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg")
 
     type EmploymentType
 
@@ -192,7 +192,7 @@ model Company {
     type        CompanyType
     name        String
     description String
-    image       String
+    image       String @default("https://storage.jobmarket.com.cy/static/default-company-avatar.jpg")
 
     workScheduleId Int
     workSchedule   WorkSchedule @relation(fields: [workScheduleId], references: [id])
