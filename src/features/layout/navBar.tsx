@@ -105,8 +105,8 @@ const NavButton: FC<{ nav: Nav; active?: boolean }> = ({
     <Link
       href={nav.href}
       className={cn(
-        "m-[-10px] flex items-center gap-[36px] p-[10px]",
-        active ? "text-white" : "text-[#3C4858]",
+        "m-[-10px] flex items-center gap-[36px] p-[10px] hover:text-[#5c6570] ",
+        active ? "!text-white" : "text-[#3C4858]",
       )}
     >
       <div className="h-[36px] w-[36px] flex-shrink-0">
