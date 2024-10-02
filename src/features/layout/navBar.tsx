@@ -57,7 +57,7 @@ export const NavBarLayout: FC<{ children: ReactNode }> = ({ children }) => {
           </div>
         </div>
       </div>
-      <div className="ml-[104px]"> {children}</div>
+      <div className="ml-[104px] h-full grow"> {children}</div>
     </div>
   );
 };
