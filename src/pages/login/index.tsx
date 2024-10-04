@@ -1,5 +1,5 @@
-import { useSession } from "next-auth/react";
-import { LoginCard } from "~/shared/components/auth/loginCard";
+import { LoginForm } from "~/shared/components/auth/loginForm";
+
 import { cn } from "~/shared/utils";
 
 export default function Login() {
@@ -9,11 +9,11 @@ export default function Login() {
         "w-[100svw]",
         "h-[100svh]",
         "flex",
-        "items-center",
+        "pt-[10%]",
         "justify-center",
       )}
     >
-      <LoginCard />
+      <LoginForm />
     </div>
   );
 }
