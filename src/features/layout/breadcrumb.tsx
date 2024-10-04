@@ -1,10 +1,48 @@
-import { FC, ReactNode } from "react";
+import { useRouter } from "next/router";
+import React, { FC, ReactNode } from "react";
+import { getRoute } from "~/shared/i18n/routes";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "~/shared/ui/breadcrumb";
 
 export const BreadCrumbLayout: FC<{ children: ReactNode }> = ({ children }) => {
+  const router = useRouter();
+  const path = router.pathname.split("/");
+  console.log(path.slice(0, 1).join("/"));
   return (
-    <div className="flex flex-col w-full bg-[#F9FAFC] h-full">
-      <div className="h-[80px] flex items-center text-[30px]  p-[8px] flex-shrink-0"> <strong>in development  </strong>   </div> 
-      <div className="grow" >{children}</div>
+    <div className="flex h-full w-full flex-col bg-[#F9FAFC]">
+      <div className="flex h-[80px] flex-shrink-0 items-center p-[24px] text-[30px]">
+        {path.length == 2 ? (
+          <strong> {getRoute(path[1]!, "ru").toUpperCase()}</strong>
+        ) : (
+          <Breadcrumb>
+            <BreadcrumbList className="text-[30px]">
+              {path.map((route, index) => (
+                <React.Fragment key={index}>
+                  <BreadcrumbItem>
+                    {index < path.length - 1 ? (
+                      <BreadcrumbLink href={path.slice(0, index + 1).join("/") || '/'}>
+                        {getRoute(route, "ru")}{" "}
+                      </BreadcrumbLink>
+                    ) : (
+                      <BreadcrumbPage> {getRoute(route, "ru")} </BreadcrumbPage>
+                    )}
+                  </BreadcrumbItem>
+                  {index < path.length - 1 && (
+                    <BreadcrumbSeparator className="mt-[8px]" size={24} />
+                  )}
+                </React.Fragment>
+              ))}
+            </BreadcrumbList>
+          </Breadcrumb>
+        )}
+      </div>
+      <div className="grow">{children}</div>
     </div>
   );
 };
