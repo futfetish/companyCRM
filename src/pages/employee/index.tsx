@@ -5,10 +5,12 @@ import { EntityPageLayout } from "~/features/layout/entityPage";
 import { NavBarLayout } from "~/features/layout/navBar";
 import { getEmploymentType } from "~/shared/i18n/db";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/shared/ui/tabs";
+import { convertToPlural } from "~/shared/utils/morph";
 
 export default function Employee() {
-
-  const typeList : EmploymentType[] =  Object.keys(EmploymentType) as EmploymentType[]
+  const typeList: EmploymentType[] = Object.keys(
+    EmploymentType,
+  ) as EmploymentType[];
 
   return (
     <>
@@ -19,15 +21,22 @@ export default function Employee() {
         <BreadCrumbLayout>
           <EntityPageLayout>
             <div> 123 </div>
-            <Tabs defaultValue="account" className="">
-              <TabsList >
-              { typeList.map((type , index) => (
-                <TabsTrigger value={type} key={index} > { getEmploymentType(type , 'ru')} </TabsTrigger>
-              )) }
+            <Tabs defaultValue="staff" className="">
+              <TabsList>
+                {typeList.map((type, index) => (
+                  <TabsTrigger value={type} key={index}>
+                    {type == "archive" || type == 'other'
+                      ? getEmploymentType(type, "ru")
+                      : convertToPlural(getEmploymentType(type, "ru"))}
+                  </TabsTrigger>
+                ))}
               </TabsList>
-              { typeList.map((type , index) => (
-                <TabsContent value={type} key={index} > { getEmploymentType(type , 'ru')} </TabsContent>
-              )) }
+              {typeList.map((type, index) => (
+                <TabsContent value={type} key={index}>
+                  {" "}
+                  {getEmploymentType(type, "ru")}{" "}
+                </TabsContent>
+              ))}
             </Tabs>
           </EntityPageLayout>
         </BreadCrumbLayout>
