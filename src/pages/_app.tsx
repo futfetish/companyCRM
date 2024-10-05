@@ -2,7 +2,7 @@ import { type Session } from "next-auth";
 import { getSession, SessionProvider } from "next-auth/react";
 import App, { AppContext, type AppType } from "next/app";
 
-import { api } from "~/utils/api";
+import { api } from "~/shared/utils/api";
 
 import "~/styles/globals.css";
 import { AppLayout } from "~/features/layout/app";

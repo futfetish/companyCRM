@@ -1,6 +1,6 @@
 import { LoginForm } from "~/shared/components/auth/loginForm";
 
-import { cn } from "~/shared/utils";
+import { cn } from "~/shared/utils/cn";
 
 export default function Login() {
   return (

@@ -1,5 +1,5 @@
 import { UserCreateForm } from "~/shared/components/user/createForm";
-import { cn } from "~/shared/utils";
+import { cn } from "~/shared/utils/cn";
 
 export default function CreateUser() {
   return (

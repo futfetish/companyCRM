@@ -14,7 +14,7 @@ import {
   FormMessage,
 } from "~/shared/ui/form";
 import { Button } from "~/shared/ui/button";
-import { cn } from "../../utils";
+import { cn } from "../../utils/cn";
 import { signIn } from "next-auth/react";
 
 const formSchema = z.object({

@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import { cn } from "~/shared/utils";
+import { cn } from "~/shared/utils/cn";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";

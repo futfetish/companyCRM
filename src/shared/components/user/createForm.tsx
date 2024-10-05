@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Input } from "~/shared/ui/input";
-import { api } from "~/utils/api";
+import { api } from "~/shared/utils/api";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from "~/shared/ui/form";
 import { Button } from "~/shared/ui/button";
-import { cn } from "~/shared/utils";
+import { cn } from "~/shared/utils/cn";
 
 const formSchema = z.object({
   username: z

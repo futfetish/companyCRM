@@ -1,6 +1,6 @@
 import { FC, ReactNode } from "react";
 import { GeistSans } from "geist/font/sans";
-import { cn } from "~/shared/utils";
+import { cn } from "~/shared/utils/cn";
 import Head from "next/head";
 
 export const AppLayout: FC<{ children: ReactNode }> = ({ children }) => {
