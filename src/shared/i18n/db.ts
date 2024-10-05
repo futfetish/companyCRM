@@ -4,7 +4,7 @@ import { i18n } from "../utils/i18n";
 type EmploymentTypeI18n =  Record< EmploymentType , {ru : string} >
 
 const employmentTypeI18n : EmploymentTypeI18n = {
-    staff: { ru: "Сотрудник" },
+    staff: { ru: "Штатный" },
     piecework: { ru: "Сдельный" },
     candidate: { ru: "Кандидат" },
     archive: { ru: "Архив" },
