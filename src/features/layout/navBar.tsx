@@ -35,14 +35,14 @@ export const NavBarLayout: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   return (
-    <div className={cn("flex w-full h-full  ")}>
+    <div className={cn("flex h-full w-full")}>
       <div
         className={cn(
           "transition-width absolute flex h-full w-[104px] flex-shrink-0 flex-col gap-[32px] overflow-hidden bg-black p-[34px] duration-100 ease-in-out hover:w-[336px]",
         )}
       >
-        <div className="flex grow flex-col justify-between gap-[32px] pb-[32px]" > 
-          <div className="flex flex-col gap-[32px]" >
+        <nav className="flex grow flex-col justify-between gap-[32px] pb-[32px]">
+          <div className="flex flex-col gap-[32px]">
             {nav.map((nav, index) => (
               <NavButton
                 active={router.pathname.startsWith(nav.href)}
@@ -55,7 +55,7 @@ export const NavBarLayout: FC<{ children: ReactNode }> = ({ children }) => {
           <div onClick={() => signOut()}>
             <NavButton key={"leave"} nav={leaveNav} />
           </div>
-        </div>
+        </nav>
       </div>
       <div className="ml-[104px] h-full grow"> {children}</div>
     </div>
@@ -105,7 +105,7 @@ const NavButton: FC<{ nav: Nav; active?: boolean }> = ({
     <Link
       href={nav.href}
       className={cn(
-        "m-[-10px] flex items-center gap-[36px] p-[10px] hover:text-[#5c6570] ",
+        "m-[-10px] flex items-center gap-[36px] p-[10px] hover:text-[#5c6570]",
         active ? "!text-white" : "text-[#3C4858]",
       )}
     >
