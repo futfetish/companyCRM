@@ -113,7 +113,7 @@ export const UserCreateForm: FC = () => {
             </FormItem>
           )}
         />
-        <FormMessage className="absolute top-[-60px]">
+        <FormMessage className="absolute w-full text-center top-[15px]">
           {form.formState.errors.root?.message}
         </FormMessage>
         <Button
