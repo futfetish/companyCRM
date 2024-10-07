@@ -16,6 +16,7 @@ import {
 import { Button } from "~/shared/ui/button";
 import { cn } from "../../utils/cn";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const formSchema = z.object({
   username: z
@@ -42,6 +43,8 @@ export const LoginForm: FC = () => {
     },
   });
 
+  const router = useRouter()
+
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -67,6 +70,7 @@ export const LoginForm: FC = () => {
     } else {
       form.clearErrors("root");
       console.log(result.status);
+      router.push('/')
     }
     setIsLoading(false);
   };
@@ -127,7 +131,7 @@ export const LoginForm: FC = () => {
             </FormItem>
           )}
         />
-        <FormMessage className="absolute top-[-60px]">
+        <FormMessage className="absolute w-full text-center top-[15px]">
           {form.formState.errors.root?.message}
         </FormMessage>
         <Button
