@@ -158,6 +158,8 @@ model Employee {
     disabilityDetails     String?
     criminalRecordDetails String?
 
+    isFavorite Boolean @default(false)
+
     experience Experience[]
 
     education Education[]
@@ -206,6 +208,8 @@ model Company {
 
     regionId Int
     region   region @relation(fields: [regionId], references: [id], onDelete: Cascade)
+
+    isFavorite Boolean @default(false)
 
     employees Employee[]
 }
