@@ -2,9 +2,11 @@ import { FC, ReactNode } from "react";
 import { cn } from "~/shared/utils/cn";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { Avatar, AvatarFallback } from "~/shared/ui/avatar";
+import { AvatarImage } from "@radix-ui/react-avatar";
 
-type NavIcon = "person" | "circle" | "company";
+type NavIcon = "person" | "circle" | "company" | 'avatar';
 
 interface Nav {
   title: string;
@@ -13,7 +15,15 @@ interface Nav {
 }
 
 export const NavBarLayout: FC<{ children: ReactNode }> = ({ children }) => {
+
+  const session = useSession({required : true})
+
   const nav: Nav[] = [
+    {
+      title: session.data?.user.name ?? 'user',
+      href: `/user/${session.data?.user.id}`,
+      icon: "avatar",
+    },
     {
       title: "Люди",
       href: "/employee",
@@ -66,6 +76,9 @@ const NavButton: FC<{ nav: Nav; active?: boolean }> = ({
   nav,
   active = false,
 }) => {
+
+  const session = useSession({required : true})
+
   const navIcons: Record<NavIcon, ReactNode> = {
     person: (
       <svg
@@ -99,6 +112,17 @@ const NavButton: FC<{ nav: Nav; active?: boolean }> = ({
         <circle cx="12" cy="12" r="10" fill="currentColor" />
       </svg>
     ),
+    avatar : (
+     <Avatar>
+      {session.status == 'authenticated' && (
+         <AvatarImage src={session.data.user.image} />
+      )}
+     
+      <AvatarFallback>
+        {session.status == 'authenticated' ?  session.data.user.name[0]?.toUpperCase() : 'U' }
+      </AvatarFallback>
+     </Avatar>
+    )
   };
 
   return (
@@ -113,8 +137,7 @@ const NavButton: FC<{ nav: Nav; active?: boolean }> = ({
         {navIcons[nav.icon]}
       </div>
       <div className="text-[16px]">
-        {" "}
-        <strong> {nav.title} </strong>{" "}
+        <strong> {nav.title} </strong>
       </div>
     </Link>
   );
