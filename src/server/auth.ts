@@ -20,7 +20,8 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
-      // ...other properties
+      image: string;
+      name : string
       // role: UserRole;
     };
   }
@@ -37,18 +38,37 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  secret : process.env.NEXTAUTH_SECRET ,
-  pages : {
-    signIn : '/login'
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/login",
   },
-  session : {
-    strategy : 'jwt'
+  session: {
+    strategy: "jwt",
   },
+  jwt: {},
   callbacks: {
     async jwt({ token, user }) {
+      console.log(token, user);
       if (user) {
         token.id = user.id;
+      } else {
+        if (typeof token.id !== "string") {
+          throw new Error("JWT: err");
+        }
+
+        const currentUser = await db.user.findUnique({
+          where: {
+            id: token.id,
+          },
+        });
+
+        if (!currentUser) {
+          throw new Error("JWT: user dont exist");
+        }
+        token.picture = currentUser.image;
+        token.name = currentUser.name;
       }
+
       return token;
     },
     async session({ session, token }) {
@@ -67,26 +87,28 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-
-        if(!credentials){
-          throw new Error()
+        if (!credentials) {
+          throw new Error();
         }
         const user = await db.user.findUnique({
-          where : {
-            name : credentials.username
-          }
-        })
+          where: {
+            name: credentials.username,
+          },
+        });
 
-        if(!user){
-          throw new Error( 'name er' )
+        if (!user) {
+          throw new Error("name er");
         }
 
-        const isPasswordValid = await bcrypt.compare( credentials.password , user.password )
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password,
+        );
 
-        if(isPasswordValid){
-          return user
-        } else{
-          throw new Error( 'paswword er' )
+        if (isPasswordValid) {
+          return user;
+        } else {
+          throw new Error("paswword er");
         }
       },
     }),
