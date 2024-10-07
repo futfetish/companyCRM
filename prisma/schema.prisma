@@ -130,6 +130,12 @@ enum DrivingLicense {
     noLicense // Нет
 }
 
+model Position {
+    id        Int      @id @default(autoincrement())
+    title     String   
+    employees Employee[]
+}
+
 model Employee {
     id       Int    @id @default(autoincrement())
     fullName String
@@ -137,7 +143,8 @@ model Employee {
 
     type EmploymentType
 
-    position  String
+    positionId Int
+    position  Position @relation(fields: [positionId] , references: [id])
     companyId Int
     company   Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
     status    EmploymentStatus

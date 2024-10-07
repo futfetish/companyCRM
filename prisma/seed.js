@@ -8,7 +8,8 @@ async function main() {
   await prisma.company.deleteMany({});
   await prisma.region.deleteMany({});
   await prisma.country.deleteMany({});
-  await prisma.workSchedule.deleteMany({}); 
+  await prisma.workSchedule.deleteMany({});
+  await prisma.position.deleteMany({});
 
   // Создание стран
   const countries = await Promise.all([
@@ -40,7 +41,7 @@ async function main() {
     }),
   ]);
 
-// Создание расписаний работы
+  // Создание расписаний работы
   const workSchedules = await Promise.all([
     prisma.workSchedule.create({
       data: {
@@ -100,13 +101,37 @@ async function main() {
     }),
   ]);
 
+  // Создание должностей
+  const positions = await Promise.all([
+    prisma.position.create({
+      data: {
+        title: "Менеджер",
+      },
+    }),
+    prisma.position.create({
+      data: {
+        title: "Разработчик",
+      },
+    }),
+    prisma.position.create({
+      data: {
+        title: "Директор",
+      },
+    }),
+    prisma.position.create({
+      data: {
+        title: "Android разработчик",
+      },
+    }),
+  ]);
+
   // Создание сотрудников
   const employees = await Promise.all([
     prisma.employee.create({
       data: {
         fullName: "Иван Иванов",
         type: "staff",
-        position: "Менеджер",
+        positionId: positions[0].id,
         companyId: companies[0].id,
         status: "fullDay",
         phone: "1112223333",
@@ -121,13 +146,13 @@ async function main() {
         experience: {
           create: [
             {
-              company: 'kcel',
+              company: "kcel",
               position: "Старший менеджер",
               start: new Date("2020-01-01"),
               end: new Date("2022-01-01"),
               responsibilities: "Управление проектами",
-              countryId : countries[0].id,
-              regionId : regions[0].id
+              countryId: countries[0].id,
+              regionId: regions[0].id,
             },
           ],
         },
@@ -149,7 +174,7 @@ async function main() {
       data: {
         fullName: "Петр Петров",
         type: "candidate",
-        position: "Разработчик",
+        positionId: positions[1].id,
         companyId: companies[1].id,
         status: "freelancer",
         phone: "4445556666",
@@ -164,13 +189,13 @@ async function main() {
         experience: {
           create: [
             {
-              company: 'spotify',
+              company: "spotify",
               position: "Младший разработчик",
               start: new Date("2021-01-01"),
               end: null, // Настоящее время
               responsibilities: "Разработка веб-приложений",
-              countryId : countries[1].id,
-              regionId : regions[1].id
+              countryId: countries[1].id,
+              regionId: regions[1].id,
             },
           ],
         },
