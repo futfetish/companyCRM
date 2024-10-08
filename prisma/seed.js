@@ -94,6 +94,7 @@ async function main() {
         phone: "0987654321",
         email: "company2@example.com",
         site: "https://company2.com",
+        isFavorite : true,
         workScheduleId: workSchedules[1].id,
         countryId: countries[1].id,
         regionId: regions[1].id,
@@ -186,6 +187,7 @@ async function main() {
         hasCriminalRecord: false,
         pensioner: false,
         notAbroad: true,
+        isFavorite : true,
         experience: {
           create: [
             {
