@@ -5,6 +5,7 @@ import {
   EmploymentType,
   MaritalStatus,
 } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 
 export const employeeRouter = createTRPCRouter({
   select: publicProcedure
@@ -42,6 +43,13 @@ export const employeeRouter = createTRPCRouter({
           position: true, // Подключаем информацию о должности
         },
       });
+
+      if(!employees){
+        throw new TRPCError({
+          code : 'BAD_REQUEST',
+          message: "user with the same name already exists",
+        });
+      }
 
       return employees;
     }),
