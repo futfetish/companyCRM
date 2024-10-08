@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import {
   EmploymentStatus,
   EmploymentType,
@@ -44,13 +44,53 @@ export const employeeRouter = createTRPCRouter({
         },
       });
 
-      if(!employees){
+      if (!employees) {
         throw new TRPCError({
-          code : 'BAD_REQUEST',
+          code: "BAD_REQUEST",
           message: "user with the same name already exists",
         });
       }
 
       return employees;
+    }),
+  setFavorite: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        value: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, value } = input;
+      const employee = await ctx.db.employee.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      if (!employee) {
+        throw new TRPCError({
+          message: "404",
+          code: "NOT_FOUND",
+        });
+      }
+
+      const updatedEmployee = await ctx.db.employee.update({
+        where: {
+          id,
+        },
+        data: {
+          isFavorite: value,
+        },
+      });
+
+      if (!updatedEmployee) {
+        throw new TRPCError({
+          message: "404",
+          code: "BAD_REQUEST",
+        });
+      }
+
+      return updatedEmployee;
     }),
 });
