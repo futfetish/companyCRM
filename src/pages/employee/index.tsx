@@ -10,7 +10,7 @@ import { BreadCrumbLayout } from "~/features/layout/breadcrumb";
 import { EntityPageLayout } from "~/features/layout/entityPage";
 import { NavBarLayout } from "~/features/layout/navBar";
 import { Col, List } from "~/shared/components/list/list";
-import { getEmploymentType } from "~/shared/i18n/db";
+import { getCompanyType, getEmploymentType } from "~/shared/i18n/db";
 import { Avatar, AvatarFallback, AvatarImage } from "~/shared/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/shared/ui/tabs";
 import { api } from "~/shared/utils/api";
@@ -188,7 +188,7 @@ const CompanyInfo: FC<{ company: Company }> = ({ company }) => {
           {company.name}
         </p>
         <p className="text-[12px] font-medium leading-[16px] text-[#8492A6]">
-          {company.type}
+          {getCompanyType(company.type , 'ru')}
         </p>
       </div>
     </div>
