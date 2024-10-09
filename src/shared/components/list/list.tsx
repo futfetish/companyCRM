@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useCallback, useState } from "react";
 import { Card } from "~/shared/ui/card";
 import { cn } from "~/shared/utils/cn";
 
@@ -8,6 +8,7 @@ export interface Col<T extends { isFavorite: boolean; id: number }> {
   title: string;
   value: string;
   render: FC<{ item: T }>;
+  sort: (items: T[], direction: "asc" | "desc") => T[];
 }
 
 interface ListProps<T extends { isFavorite: boolean; id: number }> {
@@ -21,10 +22,30 @@ export const List = <T extends { isFavorite: boolean; id: number }>({
   cols,
   onFavorite,
 }: ListProps<T>) => {
-  const favoriteItems = list.filter((item) => item.isFavorite);
-  const nonFavoriteItems = list.filter((item) => !item.isFavorite);
   const [globalSelect, setGloalSelect] = useState(false);
   const [sort, setSort] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+
+  const toggleSort = (colValue: string) => {
+    if (sort === colValue) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSort(colValue);
+      setSortDirection("asc");
+    }
+  };
+
+  const sortItems = useCallback(  (items: T[]) => {
+    if (!sort) return items;
+
+    const col = cols.find((c) => c.value === sort);
+    if (!col?.sort) return items;
+
+    return col.sort(items, sortDirection);
+  } , [cols, sort, sortDirection ] )
+
+  const favoriteItems = sortItems(list.filter((item) => item.isFavorite));
+  const nonFavoriteItems = sortItems(list.filter((item) => !item.isFavorite));
 
   const [selected, setSelected] = useState(new Set());
 
@@ -77,11 +98,11 @@ export const List = <T extends { isFavorite: boolean; id: number }>({
             </svg>
           )}
         </div>
-        <div className="ml-[72px] flex items-center gap-[12px]">
+        <div className="ml-[80px] flex select-none items-center gap-[12px]">
           {cols.map((col, index) => (
             <div
               key={index}
-              onClick={() => setSort(col.value)}
+              onClick={() => toggleSort(col.value)}
               style={{ width: `${col.width}px` }}
             >
               <p
@@ -91,7 +112,7 @@ export const List = <T extends { isFavorite: boolean; id: number }>({
                 )}
               >
                 <strong> {col.title.toUpperCase()} </strong>
-                {sort === col.value ? (
+                {sort === col.value && sortDirection === "asc" ? (
                   <ArrowDown size={20} />
                 ) : (
                   <ArrowUp size={20} />
@@ -197,7 +218,7 @@ const Item: FC<{
           </svg>
         )}
       </div>
-      <div className="flex items-center gap-[12px]">{children}</div>
+      <div className="ml-[8px] flex items-center gap-[12px]">{children}</div>
     </Card>
   );
 };
