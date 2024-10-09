@@ -93,4 +93,7 @@ export const employeeRouter = createTRPCRouter({
 
       return updatedEmployee;
     }),
+  getPositions: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.db.position.findMany();
+  }),
 });
