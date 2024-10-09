@@ -15,15 +15,17 @@ interface ListProps<T extends { isFavorite: boolean; id: number }> {
   list: T[];
   cols: Col<T>[];
   onFavorite: (item: T, status: boolean) => void;
+  defaultSort: string;
 }
 
 export const List = <T extends { isFavorite: boolean; id: number }>({
   list,
   cols,
   onFavorite,
+  defaultSort
 }: ListProps<T>) => {
   const [globalSelect, setGloalSelect] = useState(false);
-  const [sort, setSort] = useState<string | null>(null);
+  const [sort, setSort] = useState<string>(defaultSort);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const toggleSort = (colValue: string) => {
@@ -35,14 +37,17 @@ export const List = <T extends { isFavorite: boolean; id: number }>({
     }
   };
 
-  const sortItems = useCallback(  (items: T[]) => {
-    if (!sort) return items;
+  const sortItems = useCallback(
+    (items: T[]) => {
+      if (!sort) return items;
 
-    const col = cols.find((c) => c.value === sort);
-    if (!col?.sort) return items;
+      const col = cols.find((c) => c.value === sort);
+      if (!col?.sort) return items;
 
-    return col.sort(items, sortDirection);
-  } , [cols, sort, sortDirection ] )
+      return col.sort(items, sortDirection);
+    },
+    [cols, sort, sortDirection],
+  );
 
   const favoriteItems = sortItems(list.filter((item) => item.isFavorite));
   const nonFavoriteItems = sortItems(list.filter((item) => !item.isFavorite));
