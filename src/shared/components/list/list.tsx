@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { FC, ReactNode, useCallback, useState } from "react";
 import { Card } from "~/shared/ui/card";
+import { Checkbox } from "~/shared/ui/checkbox";
 import { cn } from "~/shared/utils/cn";
 
 export interface Col<T extends { isFavorite: boolean; id: number }> {
@@ -81,27 +82,7 @@ export const List = <T extends { isFavorite: boolean; id: number }>({
           className="ml-[4px] cursor-pointer"
           onClick={() => setGloalSelect(!globalSelect)}
         >
-          {globalSelect ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="#1F2D3D"
-              viewBox="0 0 16 16"
-            >
-              <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z" />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="#D3DCE6"
-              viewBox="0 0 16 16"
-            >
-              <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
-            </svg>
-          )}
+          <Checkbox checked={globalSelect} />
         </div>
         <div className="ml-[80px] flex select-none items-center gap-[12px]">
           {cols.map((col, index) => (
@@ -177,7 +158,8 @@ const Item: FC<{
         className="ml-[4px] cursor-pointer"
         onClick={() => onSelected(!isSelected)}
       >
-        {isSelected ? (
+        <Checkbox checked={isSelected} />
+        {/* {isSelected ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"
@@ -197,7 +179,7 @@ const Item: FC<{
           >
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z" />
           </svg>
-        )}
+        )} */}
       </div>
 
       <div className="cursor-pointer" onClick={() => onFavorite(!isFavorite)}>
