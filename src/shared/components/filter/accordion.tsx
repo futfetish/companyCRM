@@ -10,7 +10,7 @@ interface FilterAccordionProps<T> {
     count: (value: T) => number
   }
   
-  const FilterAccordion = <T,>({
+export  const FilterAccordion = <T,>({
     list,
     toggle,
     checked,
