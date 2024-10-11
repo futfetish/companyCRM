@@ -30,7 +30,7 @@ export  const FilterAccordion = <T,>({
                   className="flex cursor-pointer items-center justify-between"
                   onClick={() => toggle(el)}
                 >
-                  <div className="flex items-center gap-[16px]">
+                  <div className="flex items-center gap-[16px] select-none">
                     <Checkbox checked={checked(el)} />
                     {render(el)}
                   </div>
