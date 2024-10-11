@@ -28,10 +28,13 @@ import {
   $employees,
   $employeesType,
   $filteredEmployees,
+  $positionIds,
+  addPositionId,
+  removePositionId,
   setEmployees,
   setEmployeesType,
 } from "~/store/employeeStore";
-import { useUnit } from 'effector-react';
+import { useUnit } from "effector-react";
 
 interface Employee extends EmployeeI {
   company: Company;
@@ -60,10 +63,7 @@ export default function Employe({ employees }: { employees: Employee[] }) {
     EmploymentType,
   ) as EmploymentType[];
 
-  const tab = useUnit($employeesType) ;
-
-
-  const { data: positions } = api.employee.getPositions.useQuery();
+  const tab = useUnit($employeesType);
 
   return (
     <>
@@ -73,35 +73,7 @@ export default function Employe({ employees }: { employees: Employee[] }) {
       <NavBarLayout>
         <BreadCrumbLayout>
           <EntityPageLayout>
-            <div className="flex flex-col gap-[24px]">
-              <div className="flex h-[48px] h-full items-center justify-center rounded-full border border-[#D3DCE6] bg-[#F9FAFC]">
-                search
-              </div>
-              <div className="flex items-center gap-[16px]">
-                <p className="leading-28.8 text-[20px] font-normal text-[#8492A6]">
-                  НАСТРОЙКИ ФИЛЬТРА
-                </p>
-                <div>
-                  <Settings2 size={24} />
-                </div>
-              </div>
-              <Accordion type="multiple">
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>ДОЛЖНОСТЬ</AccordionTrigger>
-                  <AccordionContent>
-                    <div className="flex flex-col gap-[10px]">
-                      {positions &&
-                        positions.map((position) => (
-                          <div key={position.id}>
-                            <Checkbox />
-                            {position.title}
-                          </div>
-                        ))}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
+            <EmployeesFilter />
             <Tabs
               className=""
               value={tab}
@@ -258,5 +230,65 @@ const CompanyInfo: FC<{ company: Company }> = ({ company }) => {
         </p>
       </div>
     </div>
+  );
+};
+
+const EmployeesFilter: FC = () => {
+  return (
+    <div className="flex flex-col gap-[24px]">
+      <div className="flex h-[48px] w-full items-center justify-center rounded-full border border-[#D3DCE6] bg-[#F9FAFC]">
+        search
+      </div>
+      <div className="flex items-center gap-[16px]">
+        <p className="leading-28.8 text-[20px] font-normal text-[#8492A6]">
+          НАСТРОЙКИ ФИЛЬТРА
+        </p>
+        <div>
+          <Settings2 size={24} />
+        </div>
+      </div>
+      <EmployeesPositionFilter />
+    </div>
+  );
+};
+
+const EmployeesPositionFilter: FC = () => {
+  const { data: positions } = api.employee.getPositions.useQuery();
+  const positionsIds = useUnit($positionIds);
+  const employees = useUnit($employees);
+  const togglePositionId = (id: number) => {
+    if (positionsIds.has(id)) {
+      removePositionId(id);
+    } else {
+      addPositionId(id);
+    }
+  };
+
+  return (
+    <Accordion type="multiple">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>ДОЛЖНОСТЬ</AccordionTrigger>
+        <AccordionContent>
+          <div className="flex flex-col gap-[10px]">
+            {positions &&
+              positions.map((position) => (
+                <div
+                  key={position.id}
+                  className="flex cursor-pointer items-center justify-between"
+                  onClick={() => togglePositionId(position.id)}
+                >
+                  <div className="flex items-center gap-[16px]" >
+                    <Checkbox checked={positionsIds.has(position.id)} />
+                    {position.title}
+                  </div>
+                  <div className="font-bold" > 
+                    { employees.filter((employee) => employee.type == $employeesType.getState() && employee.positionId == position.id).length }
+                  </div>
+                </div>
+              ))}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 };
