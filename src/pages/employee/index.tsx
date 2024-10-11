@@ -7,7 +7,7 @@ import {
 import { Accordion } from "@radix-ui/react-accordion";
 import { Settings2 } from "lucide-react";
 import Head from "next/head";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { BreadCrumbLayout } from "~/features/layout/breadcrumb";
 import { EntityPageLayout } from "~/features/layout/entityPage";
 import { NavBarLayout } from "~/features/layout/navBar";
@@ -24,7 +24,14 @@ import { Checkbox } from "~/shared/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/shared/ui/tabs";
 import { api } from "~/shared/utils/api";
 import { convertToPlural } from "~/shared/utils/morph";
-import { $employees, setEmployees } from "~/store/employeeStore";
+import {
+  $employees,
+  $employeesType,
+  $filteredEmployees,
+  setEmployees,
+  setEmployeesType,
+} from "~/store/employeeStore";
+import { useUnit } from 'effector-react';
 
 interface Employee extends EmployeeI {
   company: Company;
@@ -53,7 +60,8 @@ export default function Employe({ employees }: { employees: Employee[] }) {
     EmploymentType,
   ) as EmploymentType[];
 
-  const [tab, setTab] = useState<string | undefined>("staff");
+  const tab = useUnit($employeesType) ;
+
 
   const { data: positions } = api.employee.getPositions.useQuery();
 
@@ -97,7 +105,9 @@ export default function Employe({ employees }: { employees: Employee[] }) {
             <Tabs
               className=""
               value={tab}
-              onValueChange={(value) => setTab(value)}
+              onValueChange={(value) =>
+                setEmployeesType(value as EmploymentType)
+              }
             >
               <TabsList>
                 {typeList.map((type, index) => (
@@ -110,7 +120,10 @@ export default function Employe({ employees }: { employees: Employee[] }) {
                       ? getEmploymentType(type, "ru")
                       : convertToPlural(getEmploymentType(type, "ru"))}
                     <div className="rounded-[8px] bg-[#050504] px-[8px] py-[4px] text-center text-[12px] font-normal leading-[16px] tracking-tighter text-white">
-                      {employees.filter((employee) => employee.type == type).length}
+                      {
+                        employees.filter((employee) => employee.type == type)
+                          .length
+                      }
                     </div>
                   </TabsTrigger>
                 ))}
@@ -129,9 +142,7 @@ export default function Employe({ employees }: { employees: Employee[] }) {
 }
 
 const EmployeeList: FC<{ type: EmploymentType }> = ({ type }) => {
-  const employees = $employees
-    .getState()
-    .filter((employee) => employee.type == type);
+  const employees = useUnit($filteredEmployees);
 
   const { mutate: setFavorite } = api.employee.setFavorite.useMutation({
     onSuccess: (data) => {
