@@ -34,7 +34,7 @@ export  const FilterAccordion = <T,>({
                     <Checkbox checked={checked(el)} />
                     {render(el)}
                   </div>
-                  <div className="font-bold">
+                  <div className="font-bold select-none">
                     {
                      count(el)
                     }
