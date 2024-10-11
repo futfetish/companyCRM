@@ -100,7 +100,7 @@ export default function Employe({ employees }: { employees: Employee[] }) {
               </TabsList>
               {typeList.map((type, index) => (
                 <TabsContent value={type} key={index}>
-                  <EmployeeList type={type} />
+                  <EmployeeList />
                 </TabsContent>
               ))}
             </Tabs>
@@ -111,7 +111,7 @@ export default function Employe({ employees }: { employees: Employee[] }) {
   );
 }
 
-const EmployeeList: FC<{ type: EmploymentType }> = ({ type }) => {
+const EmployeeList: FC = () => {
   const employees = useUnit($filteredEmployees);
 
   const { mutate: setFavorite } = api.employee.setFavorite.useMutation({
