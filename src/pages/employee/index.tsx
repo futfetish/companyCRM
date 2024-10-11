@@ -1,40 +1,38 @@
 import {
   Company,
   Employee as EmployeeI,
+  EmploymentStatus,
   EmploymentType,
   Position,
 } from "@prisma/client";
-import { Accordion } from "@radix-ui/react-accordion";
 import { Settings2 } from "lucide-react";
 import Head from "next/head";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { BreadCrumbLayout } from "~/features/layout/breadcrumb";
 import { EntityPageLayout } from "~/features/layout/entityPage";
 import { NavBarLayout } from "~/features/layout/navBar";
 import { db } from "~/server/db";
 import { Col, List } from "~/shared/components/list/list";
 import { getCompanyType, getEmploymentType } from "~/shared/i18n/db";
-import {
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "~/shared/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "~/shared/ui/avatar";
-import { Checkbox } from "~/shared/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/shared/ui/tabs";
 import { api } from "~/shared/utils/api";
 import { convertToPlural } from "~/shared/utils/morph";
 import {
   $employees,
+  $employeesPositionIds,
+  $employeesStatusList,
   $employeesType,
   $filteredEmployees,
-  $positionIds,
   addPositionId,
+  addStatus,
   removePositionId,
+  removeStatus,
   setEmployees,
   setEmployeesType,
 } from "~/store/employeeStore";
 import { useUnit } from "effector-react";
+import { FilterAccordion } from "~/shared/components/filter/accordion";
 
 interface Employee extends EmployeeI {
   company: Company;
@@ -248,47 +246,74 @@ const EmployeesFilter: FC = () => {
         </div>
       </div>
       <EmployeesPositionFilter />
+      <EmployeesStatusFilter />
     </div>
   );
 };
 
 const EmployeesPositionFilter: FC = () => {
   const { data: positions } = api.employee.getPositions.useQuery();
-  const positionsIds = useUnit($positionIds);
+  const positionsIds = useUnit($employeesPositionIds);
   const employees = useUnit($employees);
-  const togglePositionId = (id: number) => {
+  const type = useUnit($employeesType);
+  const togglePositionId = ({ id }: Position) => {
     if (positionsIds.has(id)) {
       removePositionId(id);
     } else {
       addPositionId(id);
     }
   };
+  if (positions && positions.length > 0) {
+    return (
+      <FilterAccordion<Position>
+        list={positions}
+        toggle={togglePositionId}
+        title="ДОЛЖНОСТЬ"
+        render={(position) => position.title}
+        count={(position) =>
+          employees.filter(
+            (employee) =>
+              employee.type == type && employee.positionId == position.id,
+          ).length
+        }
+        checked={(position) => positionsIds.has(position.id)}
+      />
+    );
+  }
+};
+
+const EmployeesStatusFilter: FC = () => {
+  const statusChecked = useUnit($employeesStatusList);
+  const employees = useUnit($employees);
+  const type = useUnit($employeesType);
+  const statusList = Array.from(
+    new Set(
+      employees
+        .filter((employee) => employee.type == type)
+        .map((employee) => employee.status),
+    ),
+  );
+
+  const toggleStatusId = (status: EmploymentStatus) => {
+    if (statusChecked.has(status)) {
+      removeStatus(status);
+    } else {
+      addStatus(status);
+    }
+  };
 
   return (
-    <Accordion type="multiple">
-      <AccordionItem value="item-1">
-        <AccordionTrigger>ДОЛЖНОСТЬ</AccordionTrigger>
-        <AccordionContent>
-          <div className="flex flex-col gap-[10px]">
-            {positions &&
-              positions.map((position) => (
-                <div
-                  key={position.id}
-                  className="flex cursor-pointer items-center justify-between"
-                  onClick={() => togglePositionId(position.id)}
-                >
-                  <div className="flex items-center gap-[16px]" >
-                    <Checkbox checked={positionsIds.has(position.id)} />
-                    {position.title}
-                  </div>
-                  <div className="font-bold" > 
-                    { employees.filter((employee) => employee.type == $employeesType.getState() && employee.positionId == position.id).length }
-                  </div>
-                </div>
-              ))}
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <FilterAccordion<EmploymentStatus>
+      list={statusList}
+      toggle={toggleStatusId}
+      checked={(status) => statusChecked.has(status)}
+      title="СТАТУС"
+      count={(status) =>
+        employees.filter(
+          (employee) => employee.type == type && employee.status == status,
+        ).length
+      }
+      render={(status) => status}
+    />
   );
 };

@@ -6,6 +6,33 @@ export const reset = createEvent();
 export const addPositionId = createEvent<number>();
 export const removePositionId = createEvent<number>();
 
+export const $employeesPositionIds = createStore<Set<number>>(new Set())
+  .on(addPositionId, (state, id) => {
+    const newState = new Set(state);
+    newState.add(id);
+    return newState;
+  })
+  .on(removePositionId, (state, id) => {
+    const newState = new Set(state);
+    newState.delete(id);
+    return newState;
+  });
+
+export const addStatus = createEvent<string>();
+export const removeStatus = createEvent<string>();
+
+export const $employeesStatusList = createStore<Set<string>>(new Set())
+  .on(addStatus, (state, id) => {
+    const newState = new Set(state);
+    newState.add(id);
+    return newState;
+  })
+  .on(removeStatus, (state, id) => {
+    const newState = new Set(state);
+    newState.delete(id);
+    return newState;
+  });
+
 interface EmployeeFull extends Employee {
   position: Position;
   company: Company;
@@ -21,27 +48,18 @@ export const setEmployeesType = createEvent<EmploymentType>();
 
 $employeesType.on(setEmployeesType, (_, type) => type);
 
-export const $positionIds = createStore<Set<number>>(new Set())
-  .on(addPositionId, (state, id) => {
-    const newState = new Set(state);
-    newState.add(id);
-    return newState;
-  })
-  .on(removePositionId, (state, id) => {
-    const newState = new Set(state);
-    newState.delete(id);
-    return newState;
-  });
+
 
 export const $filteredEmployees = createStore<EmployeeFull[]>([]);
 
 sample({
   source: {
     employees: $employees,
-    positionFilter: $positionIds,
+    positionFilter: $employeesPositionIds,
     typeFilter: $employeesType,
+    statusFilter: $employeesStatusList
   },
-  clock: [addPositionId, removePositionId, setEmployeesType, setEmployees],
+  clock: [addPositionId, removePositionId, addStatus , removeStatus , setEmployeesType, setEmployees],
   fn: ({ employees, positionFilter, typeFilter }) => {
     return employees.filter(
       (employee) =>
