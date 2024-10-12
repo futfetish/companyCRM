@@ -215,6 +215,135 @@ async function main() {
         },
       },
     }),
+    prisma.employee.create({
+      data: {
+        fullName: "Мирай Сато",
+        type: "staff",
+        positionId: positions[1].id,
+        companyId: companies[0].id,
+        status: "fullDay",
+        phone: "1112223333",
+        email: "sowwy@example.com",
+        maritalStatus: 'notSpecified',
+        CarOwnership: true,
+        drivingLicense: "B",
+        hasDisability: false,
+        hasCriminalRecord: false,
+        pensioner: false,
+        notAbroad: true,
+        experience: {
+          create: [
+            {
+              company: "kcel",
+              position: "HR",
+              start: new Date("2021-01-01"),
+              end: new Date("2022-05-01"),
+              responsibilities: "Поиск сотрудников",
+              countryId: countries[0].id,
+              regionId: regions[1].id,
+            },
+          ],
+        },
+        education: {
+          create: [
+            {
+              level: "higherEducation",
+              name: "Университет antragent",
+              faculty: "Экономический",
+              speciality: "Менеджмент",
+              start: new Date("2013-01-01"),
+              end: new Date("2016-01-01"),
+            },
+          ],
+        },
+      },
+    }),
+    prisma.employee.create({
+      data: {
+        fullName: "Икуё Кита",
+        type: "staff",
+        positionId: positions[0].id,
+        companyId: companies[1].id,
+        status: 'workingStudent',
+        phone: "1112223333",
+        email: "kitaktiakita@example.com",
+        maritalStatus: "single",
+        CarOwnership: true,
+        drivingLicense: "A",
+        hasDisability: false,
+        hasCriminalRecord: false,
+        pensioner: false,
+        notAbroad: true,
+        experience: {
+          create: [
+            {
+              company: "kaspi",
+              position: "Разработчик",
+              start: new Date("2021-01-01"),
+              end: new Date("2021-10-01"),
+              responsibilities: "Разработка",
+              countryId: countries[0].id,
+              regionId: regions[0].id,
+            },
+          ],
+        },
+        education: {
+          create: [
+            {
+              level: "higherEducation",
+              name: "хеклин",
+              faculty: "IT",
+              speciality: "Разработка ПО",
+              start: new Date("2022-01-01"),
+              end: null,
+            },
+          ],
+        },
+      },
+    }),
+    prisma.employee.create({
+      data: {
+        fullName: "Лейн Ивакура",
+        type: "staff",
+        positionId: positions[2].id,
+        companyId: companies[0].id,
+        status: "fullDay",
+        phone: "1112223333",
+        email: "iwakuralove@example.com",
+        maritalStatus: "single",
+        CarOwnership: false,
+        drivingLicense: 'noLicense',
+        hasDisability: false,
+        hasCriminalRecord: false,
+        pensioner: false,
+        notAbroad: true,
+        experience: {
+          create: [
+            {
+              company: "beeline",
+              position: "менеджер",
+              start: new Date("2019-01-01"),
+              end: new Date("2022-01-01"),
+              responsibilities: "Управление сотрудниками",
+              countryId: countries[0].id,
+              regionId: regions[0].id,
+            },
+          ],
+        },
+        education: {
+          create: [
+            {
+              level: 'bachelor',
+              name: "Центральный университет ",
+              faculty: "Социологический",
+              speciality: "Дипломатия",
+              start: new Date("2015-01-01"),
+              end: new Date("2019-01-01"),
+            },
+          ],
+        },
+      },
+    }),
   ]);
 
   console.log({ countries, regions, companies, employees });
