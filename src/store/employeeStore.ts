@@ -60,13 +60,14 @@ sample({
     statusFilter: $employeesStatusList
   },
   clock: [addPositionId, removePositionId, addStatus , removeStatus , setEmployeesType, setEmployees],
-  fn: ({ employees, positionFilter, typeFilter }) => {
-    return employees.filter(
-      (employee) =>
-        (positionFilter.size === 0 ||
-          positionFilter.has(employee.positionId)) &&
-        employee.type === typeFilter,
-    );
+  fn: ({ employees, positionFilter, typeFilter , statusFilter }) => {
+    return employees.filter((employee) => {
+      const positionMatches = positionFilter.size === 0 || positionFilter.has(employee.positionId);
+      const statusMatches = statusFilter.size === 0 || statusFilter.has(employee.status);
+      const typeMatches = employee.type === typeFilter;
+    
+      return positionMatches && statusMatches && typeMatches;
+    });
   },
   target: $filteredEmployees,
 });
