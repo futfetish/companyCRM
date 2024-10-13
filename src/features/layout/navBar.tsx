@@ -48,7 +48,7 @@ export const NavBarLayout: FC<{ children: ReactNode }> = ({ children }) => {
     <div className={cn("flex h-full w-full")}>
       <div
         className={cn(
-          "transition-width absolute flex h-full w-[104px] flex-shrink-0 flex-col gap-[32px] overflow-hidden bg-black p-[34px] duration-100 ease-in-out hover:w-[336px]",
+          "transition-width absolute flex h-full w-[104px] flex-shrink-0 flex-col gap-[32px] overflow-hidden bg-black p-[34px] duration-100 ease-in-out hover:w-[336px] z-[100]",
         )}
       >
         <nav className="flex grow flex-col justify-between gap-[32px] pb-[32px]">
