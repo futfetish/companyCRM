@@ -33,6 +33,21 @@ export const $employeesStatusList = createStore<Set<string>>(new Set())
     return newState;
   });
 
+export const addCompanyId = createEvent<number>();
+export const removeCompanyId = createEvent<number>();
+
+export const $employeesCompaniesIds = createStore<Set<number>>(new Set())
+  .on(addCompanyId, (state, id) => {
+    const newState = new Set(state);
+    newState.add(id);
+    return newState;
+  })
+  .on(removeCompanyId, (state, id) => {
+    const newState = new Set(state);
+    newState.delete(id);
+    return newState;
+  });
+
 interface EmployeeFull extends Employee {
   position: Position;
   company: Company;
@@ -57,16 +72,18 @@ sample({
     employees: $employees,
     positionFilter: $employeesPositionIds,
     typeFilter: $employeesType,
-    statusFilter: $employeesStatusList
+    statusFilter: $employeesStatusList,
+    companiesFilter: $employeesCompaniesIds
   },
-  clock: [addPositionId, removePositionId, addStatus , removeStatus , setEmployeesType, setEmployees],
-  fn: ({ employees, positionFilter, typeFilter , statusFilter }) => {
+  clock: [addPositionId, removePositionId, addStatus , removeStatus , setEmployeesType, setEmployees , addCompanyId , removeCompanyId],
+  fn: ({ employees, positionFilter, typeFilter , statusFilter, companiesFilter }) => {
     return employees.filter((employee) => {
       const positionMatches = positionFilter.size === 0 || positionFilter.has(employee.positionId);
       const statusMatches = statusFilter.size === 0 || statusFilter.has(employee.status);
+      const companiesMatches = companiesFilter.size === 0 || companiesFilter.has(employee.companyId);
       const typeMatches = employee.type === typeFilter;
     
-      return positionMatches && statusMatches && typeMatches;
+      return positionMatches && statusMatches && typeMatches && companiesMatches;
     });
   },
   target: $filteredEmployees,

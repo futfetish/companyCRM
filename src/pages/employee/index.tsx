@@ -20,19 +20,24 @@ import { api } from "~/shared/utils/api";
 import { convertToPlural } from "~/shared/utils/morph";
 import {
   $employees,
+  $employeesCompaniesIds,
   $employeesPositionIds,
   $employeesStatusList,
   $employeesType,
   $filteredEmployees,
+  addCompanyId,
   addPositionId,
   addStatus,
+  removeCompanyId,
   removePositionId,
   removeStatus,
   setEmployees,
   setEmployeesType,
 } from "~/store/employeeStore";
 import { useUnit } from "effector-react";
+import { FilterAccordionCheckbox } from "~/shared/components/filter/accordionCheckbox";
 import { FilterAccordion } from "~/shared/components/filter/accordion";
+import { cn } from "~/shared/utils/cn";
 
 interface Employee extends EmployeeI {
   company: Company;
@@ -247,6 +252,7 @@ const EmployeesFilter: FC = () => {
       </div>
       <EmployeesPositionFilter />
       <EmployeesStatusFilter />
+      <EmployeesCompanyFilter />
     </div>
   );
 };
@@ -265,7 +271,7 @@ const EmployeesPositionFilter: FC = () => {
   };
   if (positions && positions.length > 0) {
     return (
-      <FilterAccordion<Position>
+      <FilterAccordionCheckbox<Position>
         list={positions}
         toggle={togglePositionId}
         title="ДОЛЖНОСТЬ"
@@ -303,7 +309,7 @@ const EmployeesStatusFilter: FC = () => {
   };
 
   return (
-    <FilterAccordion<EmploymentStatus>
+    <FilterAccordionCheckbox<EmploymentStatus>
       list={statusList}
       toggle={toggleStatusId}
       checked={(status) => statusChecked.has(status)}
@@ -314,6 +320,48 @@ const EmployeesStatusFilter: FC = () => {
         ).length
       }
       render={(status) => status}
+    />
+  );
+};
+
+const EmployeesCompanyFilter: FC = () => {
+  const employees = useUnit($employees);
+  const type = useUnit($employeesType);
+  const companyChecked = useUnit($employeesCompaniesIds);
+  const companyList = Array.from(
+    new Map(
+      employees
+        .filter((employee) => employee.type === type)
+        .map((employee) => [employee.company.id, employee.company]),
+    ).values(),
+  );
+  const toggle = (company: Company) => {
+    if (companyChecked.has(company.id)) {
+      removeCompanyId(company.id);
+    } else {
+      addCompanyId(company.id);
+    }
+  };
+  return (
+    <FilterAccordion<Company>
+      render={(company) => (
+        <div
+          className={cn(
+            companyChecked.has(company.id) ? "opacity-100" : "opacity-50",
+          )}
+        >
+          <CompanyInfo company={company} />
+        </div>
+      )}
+      count={(company) =>
+        employees.filter(
+          (employee) =>
+            employee.type == type && employee.company.id == company.id,
+        ).length
+      }
+      toggle={toggle}
+      title="КОМПАНИИ"
+      list={companyList}
     />
   );
 };
