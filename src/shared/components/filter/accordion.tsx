@@ -1,50 +1,50 @@
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "~/shared/ui/accordion";
-import { Checkbox } from "~/shared/ui/checkbox";
+import { ReactNode } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "~/shared/ui/accordion";
+import { cn } from "~/shared/utils/cn";
 
-interface FilterAccordionProps<T> {
-    list: T[];
-    toggle: (value: T) => void;
-    checked: (value: T) => boolean;
-    title : string
-    render : (value: T) => string
-    count: (value: T) => number
-  }
-  
-export  const FilterAccordion = <T,>({
-    list,
-    toggle,
-    checked,
-    title,
-    render,
-    count
-  }: FilterAccordionProps<T>) => {
-    return (
-      <Accordion type="multiple">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>{title}</AccordionTrigger>
-          <AccordionContent>
-            <div className="flex flex-col gap-[10px]">
-              {list.map((el, index) => (
-                <div
-                  key={index}
-                  className="flex cursor-pointer items-center justify-between"
-                  onClick={() => toggle(el)}
-                >
-                  <div className="flex items-center gap-[16px] select-none">
-                    <Checkbox checked={checked(el)} />
-                    {render(el)}
-                  </div>
-                  <div className="font-bold select-none">
-                    {
-                     count(el)
-                    }
-                  </div>
+export interface FilterAccordionProps<T> {
+  list: T[];
+  toggle: (el: T) => void;
+  title: string;
+  render: (el: T) => ReactNode;
+  count: (el: T) => number;
+}
+
+export const FilterAccordion = <T,>({
+  list,
+  toggle,
+  title,
+  render,
+  count,
+}: FilterAccordionProps<T>) => {
+  return (
+    <Accordion type="multiple">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>{title}</AccordionTrigger>
+        <AccordionContent>
+          <div className="flex flex-col gap-[10px]">
+            {list.map((el, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "flex cursor-pointer items-center justify-between",
+                )}
+                onClick={() => toggle(el)}
+              >
+                <div className="flex select-none items-center gap-[16px]">
+                  {render(el)}
                 </div>
-              ))}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    );
-  };
-  
+                <div className="select-none font-bold">{count(el)}</div>
+              </div>
+            ))}
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+};
