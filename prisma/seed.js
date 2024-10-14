@@ -263,7 +263,7 @@ async function main() {
     }),
     prisma.employee.create({
       data: {
-        name : 'kitaktia',
+        name : 'kitakita',
         fullName: "Икуё Кита",
         type: "staff",
         positionId: positions[0].id,
