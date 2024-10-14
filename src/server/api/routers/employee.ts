@@ -11,6 +11,7 @@ export const employeeRouter = createTRPCRouter({
   select: publicProcedure
     .input(
       z.object({
+        name : z.string().optional(), // name
         companyIds: z.array(z.number()).optional(), // Массив companyId
         positionIds: z.array(z.number()).optional(), // Массив positionId
         types: z.array(z.nativeEnum(EmploymentType)).optional(), // Массив employment type
@@ -21,6 +22,7 @@ export const employeeRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const {
+        name ,
         companyIds,
         positionIds,
         types,
@@ -31,6 +33,7 @@ export const employeeRouter = createTRPCRouter({
 
       const employees = await ctx.db.employee.findMany({
         where: {
+          ...(name && {name}),
           ...(companyIds && { companyId: { in: companyIds } }), // Фильтр по companyId
           ...(positionIds && { positionId: { in: positionIds } }), // Фильтр по positionId
           ...(types && { type: { in: types } }), // Фильтр по типам занятости

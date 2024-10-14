@@ -130,6 +130,7 @@ async function main() {
   const employees = await Promise.all([
     prisma.employee.create({
       data: {
+        name : 'IvaI',
         fullName: "Иван Иванов",
         type: "staff",
         positionId: positions[0].id,
@@ -173,6 +174,7 @@ async function main() {
     }),
     prisma.employee.create({
       data: {
+        name : 'PetP',
         fullName: "Петр Петров",
         type: "candidate",
         positionId: positions[1].id,
@@ -217,6 +219,7 @@ async function main() {
     }),
     prisma.employee.create({
       data: {
+        name : 'MiraSa',
         fullName: "Мирай Сато",
         type: "staff",
         positionId: positions[1].id,
@@ -260,6 +263,7 @@ async function main() {
     }),
     prisma.employee.create({
       data: {
+        name : 'kitaktia',
         fullName: "Икуё Кита",
         type: "staff",
         positionId: positions[0].id,
@@ -303,6 +307,7 @@ async function main() {
     }),
     prisma.employee.create({
       data: {
+        name : 'iwakura',
         fullName: "Лейн Ивакура",
         type: "staff",
         positionId: positions[2].id,
