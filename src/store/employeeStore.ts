@@ -1,7 +1,7 @@
 import { Company, Employee, EmploymentType, Position } from "@prisma/client";
 import { createEvent, createStore, sample } from "effector";
 
-export const reset = createEvent();
+export const resetFilter = createEvent();
 
 export const addPositionId = createEvent<number>();
 export const removePositionId = createEvent<number>();
@@ -16,7 +16,8 @@ export const $employeesPositionIds = createStore<Set<number>>(new Set())
     const newState = new Set(state);
     newState.delete(id);
     return newState;
-  });
+  })
+  .reset(resetFilter)
 
 export const addStatus = createEvent<string>();
 export const removeStatus = createEvent<string>();
@@ -31,7 +32,8 @@ export const $employeesStatusList = createStore<Set<string>>(new Set())
     const newState = new Set(state);
     newState.delete(id);
     return newState;
-  });
+  })
+  .reset(resetFilter)
 
 export const addCompanyId = createEvent<number>();
 export const removeCompanyId = createEvent<number>();
@@ -46,7 +48,8 @@ export const $employeesCompaniesIds = createStore<Set<number>>(new Set())
     const newState = new Set(state);
     newState.delete(id);
     return newState;
-  });
+  })
+  .reset(resetFilter)
 
 interface EmployeeFull extends Employee {
   position: Position;
@@ -87,4 +90,9 @@ sample({
     });
   },
   target: $filteredEmployees,
+});
+
+sample({
+  clock: setEmployeesType,
+  target: resetFilter,
 });
