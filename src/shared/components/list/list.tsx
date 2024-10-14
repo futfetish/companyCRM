@@ -153,7 +153,7 @@ const Item: FC<{
   children?: ReactNode;
 }> = ({ isFavorite, isSelected, onFavorite, onSelected, children }) => {
   return (
-    <Card className="flex items-center gap-[24px]">
+    <Card className="flex items-center gap-[24px] bg-[#F9FAFC]">
       <div
         className="ml-[4px] cursor-pointer"
         onClick={() => onSelected(!isSelected)}
