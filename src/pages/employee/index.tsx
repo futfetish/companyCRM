@@ -38,6 +38,7 @@ import { useUnit } from "effector-react";
 import { FilterAccordionCheckbox } from "~/shared/components/filter/accordionCheckbox";
 import { FilterAccordion } from "~/shared/components/filter/accordion";
 import { cn } from "~/shared/utils/cn";
+import Link from "next/link";
 
 interface Employee extends EmployeeI {
   company: Company;
@@ -140,7 +141,12 @@ const EmployeeList: FC = () => {
       title: "Имя",
       value: "name",
       render: ({ item }) => {
-        return <EmployeeInfo employee={item} />;
+        return  (
+            <Link href={`employee/${item.name}`}>
+               <EmployeeInfo employee={item} />
+            </Link>
+        )
+       
       },
       sort: (items, direction) => {
         return items.sort((a, b) => {
