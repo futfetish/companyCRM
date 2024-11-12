@@ -1,6 +1,6 @@
 import { i18n } from "../utils/i18n";
 
-export type Route = "employee" | "company" | "resume" | "";
+export type Route = "employee" | "company" | "resume" | "" | 'general';
 
 type RoutesI18N = Record<Route, { ru: string }>;
 
@@ -17,6 +17,9 @@ const routes: RoutesI18N = {
   "": {
     ru: "Главная",
   },
+  'general' : {
+    ru: 'Общий'
+  }
 };
 
 export const getRoute = (
