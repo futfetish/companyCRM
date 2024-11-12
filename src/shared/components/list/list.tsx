@@ -155,7 +155,7 @@ const Item: FC<{
   return (
     <Card className="flex items-center gap-[24px] bg-[#F9FAFC]">
       <div
-        className="ml-[4px] cursor-pointer"
+        className="ml-[4px] cursor-pointer flex items-center"
         onClick={() => onSelected(!isSelected)}
       >
         <Checkbox checked={isSelected} />
