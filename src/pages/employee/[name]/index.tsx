@@ -80,7 +80,7 @@ export default function EmployeByNamePage({
                   </div>
                   <div>
                     {employee.position.title} в 
-                    <Link href={'#'} className="font-medium"> {employee.company.name}</Link>
+                    <Link href={'company/' + employee.company.id} className="font-medium"> {employee.company.name}</Link>
                   </div>
                 </div>
               </Card>
