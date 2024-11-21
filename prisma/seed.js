@@ -152,7 +152,12 @@ async function main() {
               position: "Старший менеджер",
               start: new Date("2020-01-01"),
               end: new Date("2022-01-01"),
-              responsibilities: "Управление проектами",
+              responsibilities: {
+                create : [
+                  { description: "Управление проектами" },
+                  { description: "Работа с клиентами" },
+                ]
+              },
               countryId: countries[0].id,
               regionId: regions[0].id,
             },
@@ -197,7 +202,11 @@ async function main() {
               position: "Младший разработчик",
               start: new Date("2021-01-01"),
               end: null, // Настоящее время
-              responsibilities: "Разработка веб-приложений",
+              responsibilities: {
+              create : [
+                { description: "Разработка ui компонентов" },
+              ]
+            },
               countryId: countries[1].id,
               regionId: regions[1].id,
             },
@@ -241,7 +250,11 @@ async function main() {
               position: "HR",
               start: new Date("2021-01-01"),
               end: new Date("2022-05-01"),
-              responsibilities: "Поиск сотрудников",
+              responsibilities: {
+                create : [
+                  {description : 'Поиск сотрудников'}
+                ]
+              },
               countryId: countries[0].id,
               regionId: regions[1].id,
             },
@@ -285,7 +298,12 @@ async function main() {
               position: "Разработчик",
               start: new Date("2021-01-01"),
               end: new Date("2021-10-01"),
-              responsibilities: "Разработка",
+              responsibilities:{
+                create: [
+                  { description: "Разработка архетектуры веб-приложений" },
+                  { description: "Оптимизация, повышение уровня безопасности и устойчивости существующих программных продуктов" },
+                ],
+              },
               countryId: countries[0].id,
               regionId: regions[0].id,
             },
@@ -329,7 +347,12 @@ async function main() {
               position: "менеджер",
               start: new Date("2019-01-01"),
               end: new Date("2022-01-01"),
-              responsibilities: "Управление сотрудниками",
+              responsibilities: {
+                create: [
+                  { description: "Управление проектами" },
+                  { description: "Работа с клиентами" },
+                ],
+              },
               countryId: countries[0].id,
               regionId: regions[0].id,
             },

@@ -46,10 +46,17 @@ model Experience {
     start DateTime
     end   DateTime? //отсутствие = по настоящие время
 
-    responsibilities String
+    responsibilities Responsibility[]
 
     employeeId Int
     employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+}
+
+model Responsibility {
+  id              Int          @id @default(autoincrement())
+  description     String
+  experienceId    Int
+  experience      Experience   @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 }
 
 model Country {
