@@ -8,7 +8,6 @@ import {
 import { Settings2 } from "lucide-react";
 import Head from "next/head";
 import { FC } from "react";
-import { BreadCrumbLayout } from "~/features/layout/breadcrumb";
 import { EntityPageLayout } from "~/features/layout/entityPage";
 import { NavBarLayout } from "~/features/layout/navBar";
 import { db } from "~/server/db";
@@ -75,8 +74,8 @@ export default function Employe({ employees }: { employees: Employee[] }) {
         <title> Люди </title>
       </Head>
       <NavBarLayout>
-        <BreadCrumbLayout>
-          <EntityPageLayout>
+
+          <EntityPageLayout title="люди">
             <EmployeesFilter />
             <Tabs
               className=""
@@ -111,7 +110,7 @@ export default function Employe({ employees }: { employees: Employee[] }) {
               ))}
             </Tabs>
           </EntityPageLayout>
-        </BreadCrumbLayout>
+   
       </NavBarLayout>
     </>
   );
