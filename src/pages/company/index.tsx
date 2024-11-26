@@ -6,7 +6,7 @@ import {
   WorkSchedule,
 } from "@prisma/client";
 import { useUnit } from "effector-react";
-import { Settings2 } from "lucide-react";
+
 import Head from "next/head";
 import Link from "next/link";
 import { FC } from "react";
