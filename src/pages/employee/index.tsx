@@ -5,7 +5,6 @@ import {
   EmploymentType,
   Position,
 } from "@prisma/client";
-import { Settings2 } from "lucide-react";
 import Head from "next/head";
 import { FC } from "react";
 import { EntityPageLayout } from "~/features/layout/entityPage";
@@ -38,6 +37,7 @@ import { FilterAccordion } from "~/shared/components/filter/accordion";
 import { cn } from "~/shared/utils/cn";
 import Link from "next/link";
 import { InfoLayout } from "~/shared/components/common/infoLayout";
+import { FilterLayout } from "~/shared/components/filter/filterLayout";
 
 interface Employee extends EmployeeI {
   company: Company;
@@ -233,22 +233,13 @@ const CompanyInfo: FC<{ company: Company }> = ({ company }) => {
 
 const EmployeesFilter: FC = () => {
   return (
-    <div className="flex flex-col gap-[24px]">
-      <div className="flex h-[48px] w-full items-center justify-center rounded-full border border-[#D3DCE6] bg-[#F9FAFC]">
-        search
-      </div>
-      <div className="flex items-center gap-[16px]">
-        <p className="leading-28.8 text-[20px] font-normal text-[#8492A6]">
-          НАСТРОЙКИ ФИЛЬТРА
-        </p>
-        <div>
-          <Settings2 size={24} />
-        </div>
-      </div>
-      <EmployeesPositionFilter />
-      <EmployeesStatusFilter />
-      <EmployeesCompanyFilter />
-    </div>
+    <FilterLayout>
+      <>
+        <EmployeesPositionFilter />
+        <EmployeesStatusFilter />
+        <EmployeesCompanyFilter />
+      </>
+    </FilterLayout>
   );
 };
 
