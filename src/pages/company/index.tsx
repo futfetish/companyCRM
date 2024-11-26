@@ -6,6 +6,7 @@ import {
   WorkSchedule,
 } from "@prisma/client";
 import { useUnit } from "effector-react";
+import { Settings2 } from "lucide-react";
 import Head from "next/head";
 import Link from "next/link";
 import { FC } from "react";
@@ -13,6 +14,7 @@ import { EntityPageLayout } from "~/features/layout/entityPage";
 import { NavBarLayout } from "~/features/layout/navBar";
 import { db } from "~/server/db";
 import { InfoLayout } from "~/shared/components/common/infoLayout";
+import { FilterLayout } from "~/shared/components/filter/filterLayout";
 import { Col, List } from "~/shared/components/list/list";
 import { getCompanyType } from "~/shared/i18n/db";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/shared/ui/tabs";
@@ -78,8 +80,7 @@ export default function CompaniesPage({ companies }: { companies: Company[] }) {
       </Head>
       <NavBarLayout>
         <EntityPageLayout title="компании">
-          {/* <EmployeesFilter /> */}
-          <div></div>
+          <CompanyFilter />
           <Tabs
             className=""
             value={tab}
@@ -171,4 +172,13 @@ const CompanyInfo: FC<{ company: Company }> = ({ company }) => {
         </div>
       </InfoLayout>
     );
-  };
+};
+
+const CompanyFilter : FC = () => {
+    return (
+        <FilterLayout>
+            <>
+            </>
+        </FilterLayout>
+      );
+}
