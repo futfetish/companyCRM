@@ -13,7 +13,6 @@ import { NavBarLayout } from "~/features/layout/navBar";
 import { db } from "~/server/db";
 import { Col, List } from "~/shared/components/list/list";
 import { getCompanyType, getEmploymentType } from "~/shared/i18n/db";
-import { Avatar, AvatarFallback, AvatarImage } from "~/shared/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/shared/ui/tabs";
 import { api } from "~/shared/utils/api";
 import { convertToPlural } from "~/shared/utils/morph";
@@ -38,6 +37,7 @@ import { FilterAccordionCheckbox } from "~/shared/components/filter/accordionChe
 import { FilterAccordion } from "~/shared/components/filter/accordion";
 import { cn } from "~/shared/utils/cn";
 import Link from "next/link";
+import { InfoLayout } from "~/shared/components/common/infoLayout";
 
 interface Employee extends EmployeeI {
   company: Company;
@@ -74,43 +74,39 @@ export default function Employe({ employees }: { employees: Employee[] }) {
         <title> Люди </title>
       </Head>
       <NavBarLayout>
-
-          <EntityPageLayout title="люди">
-            <EmployeesFilter />
-            <Tabs
-              className=""
-              value={tab}
-              onValueChange={(value) =>
-                setEmployeesType(value as EmploymentType)
-              }
-            >
-              <TabsList>
-                {typeList.map((type, index) => (
-                  <TabsTrigger
-                    value={type}
-                    key={index}
-                    className="flex gap-[8px]"
-                  >
-                    {type == "archive" || type == "other"
-                      ? getEmploymentType(type, "ru")
-                      : convertToPlural(getEmploymentType(type, "ru"))}
-                    <div className="rounded-[8px] bg-[#050504] px-[8px] py-[4px] text-center text-[12px] font-normal leading-[16px] tracking-tighter text-white">
-                      {
-                        employees.filter((employee) => employee.type == type)
-                          .length
-                      }
-                    </div>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+        <EntityPageLayout title="люди">
+          <EmployeesFilter />
+          <Tabs
+            className=""
+            value={tab}
+            onValueChange={(value) => setEmployeesType(value as EmploymentType)}
+          >
+            <TabsList>
               {typeList.map((type, index) => (
-                <TabsContent value={type} key={index}>
-                  <EmployeeList />
-                </TabsContent>
+                <TabsTrigger
+                  value={type}
+                  key={index}
+                  className="flex gap-[8px]"
+                >
+                  {type == "archive" || type == "other"
+                    ? getEmploymentType(type, "ru")
+                    : convertToPlural(getEmploymentType(type, "ru"))}
+                  <div className="rounded-[8px] bg-[#050504] px-[8px] py-[4px] text-center text-[12px] font-normal leading-[16px] tracking-tighter text-white">
+                    {
+                      employees.filter((employee) => employee.type == type)
+                        .length
+                    }
+                  </div>
+                </TabsTrigger>
               ))}
-            </Tabs>
-          </EntityPageLayout>
-   
+            </TabsList>
+            {typeList.map((type, index) => (
+              <TabsContent value={type} key={index}>
+                <EmployeeList />
+              </TabsContent>
+            ))}
+          </Tabs>
+        </EntityPageLayout>
       </NavBarLayout>
     </>
   );
@@ -140,12 +136,11 @@ const EmployeeList: FC = () => {
       title: "Имя",
       value: "name",
       render: ({ item }) => {
-        return  (
-            <Link href={`employee/${item.name}`}>
-               <EmployeeInfo employee={item} />
-            </Link>
-        )
-       
+        return (
+          <Link href={`employee/${item.name}`}>
+            <EmployeeInfo employee={item} />
+          </Link>
+        );
       },
       sort: (items, direction) => {
         return items.sort((a, b) => {
@@ -205,11 +200,10 @@ const EmployeeInfo: FC<{ employee: EmployeeI & { position: Position } }> = ({
   employee,
 }) => {
   return (
-    <div className="flex items-center gap-[16px]">
-      <Avatar>
-        <AvatarFallback>{employee.fullName[0] ?? "E"}</AvatarFallback>
-        <AvatarImage width={48} height={48} src={employee.image} />
-      </Avatar>
+    <InfoLayout
+      image={employee.image}
+      imageFallBack={employee.fullName[0] ?? "E"}
+    >
       <div>
         <p className="text-[16px] font-extrabold leading-[24px] text-[#3C4858]">
           {employee.fullName}
@@ -218,17 +212,13 @@ const EmployeeInfo: FC<{ employee: EmployeeI & { position: Position } }> = ({
           {employee.position.title}
         </p>
       </div>
-    </div>
+    </InfoLayout>
   );
 };
 
 const CompanyInfo: FC<{ company: Company }> = ({ company }) => {
   return (
-    <div className="flex items-center gap-[16px]">
-      <Avatar>
-        <AvatarFallback>{company.name[0] ?? "E"}</AvatarFallback>
-        <AvatarImage width={48} height={48} src={company.image} />
-      </Avatar>
+    <InfoLayout image={company.image} imageFallBack={company.name[0] ?? "E"}>
       <div>
         <p className="text-[16px] font-extrabold leading-[24px] text-[#3C4858]">
           {company.name}
@@ -237,7 +227,7 @@ const CompanyInfo: FC<{ company: Company }> = ({ company }) => {
           {getCompanyType(company.type, "ru")}
         </p>
       </div>
-    </div>
+    </InfoLayout>
   );
 };
 
