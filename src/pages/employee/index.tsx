@@ -142,13 +142,9 @@ const EmployeeList: FC = () => {
           </Link>
         );
       },
-      sort: (items, direction) => {
+      sort: (items) => {
         return items.sort((a, b) => {
-          if (direction === "asc") {
-            return a.fullName.localeCompare(b.fullName); // Сортировка по имени в алфавитном порядке
-          } else {
-            return b.fullName.localeCompare(a.fullName); // Сортировка по имени в обратном порядке
-          }
+          return a.fullName.localeCompare(b.fullName); // Сортировка по имени в алфавитном порядке
         });
       },
     },
@@ -159,13 +155,9 @@ const EmployeeList: FC = () => {
       render: ({ item }) => {
         return <CompanyInfo company={item.company} />;
       },
-      sort: (items, direction) => {
+      sort: (items) => {
         return items.sort((a, b) => {
-          if (direction === "asc") {
-            return a.company.name.localeCompare(b.company.name); // Сортировка по имени компании
-          } else {
-            return b.company.name.localeCompare(a.company.name); // Обратная сортировка
-          }
+          return a.company.name.localeCompare(b.company.name); // Сортировка по имени компании
         });
       },
     },

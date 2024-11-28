@@ -9,7 +9,7 @@ export interface Col<T extends { isFavorite: boolean; id: number }> {
   title: string;
   value: string;
   render: FC<{ item: T }>;
-  sort: (items: T[], direction: "asc" | "desc") => T[];
+  sort: (items: T[]) => T[];
 }
 
 interface ListProps<T extends { isFavorite: boolean; id: number }> {
@@ -45,7 +45,8 @@ export const List = <T extends { isFavorite: boolean; id: number }>({
       const col = cols.find((c) => c.value === sort);
       if (!col?.sort) return items;
 
-      return col.sort(items, sortDirection);
+      const sortedItems = col.sort(items)
+      return sortDirection === 'desc' ? sortedItems.reverse() : sortedItems;
     },
     [cols, sort, sortDirection],
   );
