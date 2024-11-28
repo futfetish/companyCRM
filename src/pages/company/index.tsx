@@ -117,13 +117,13 @@ export default function CompaniesPage({ companies }: { companies: Company[] }) {
 const CompanyList: FC = () => {
   const companies = useUnit($filteredCompanies);
 
-  const { mutate: setFavorite } = api.employee.setFavorite.useMutation({
+  const { mutate: setFavorite } = api.company.setFavorite.useMutation({
     onSuccess: (data) => {
-      const emp = companies.find((e) => e.id == data.id);
-      if (emp) {
+      const company = companies.find((c) => c.id == data.id);
+      if (company) {
         setCompanies(
           companies.map((c) =>
-            c.id === emp.id ? { ...c, isFavorite: data.isFavorite } : c,
+            c.id === company.id ? { ...c, isFavorite: data.isFavorite } : c,
           ),
         );
       }
@@ -136,18 +136,43 @@ const CompanyList: FC = () => {
       title: "Название",
       value: "name",
       render: ({ item }) => {
-        return <Link href={`company/${item.name}`}>
+        return (
+          <Link href={`company/${item.name}`}>
             <CompanyInfo company={item} />
-        </Link>;
+          </Link>
+        );
       },
-      sort: (items, direction) => {
+      sort: (items) => {
         return items.sort((a, b) => {
-          if (direction === "asc") {
-            return a.name.localeCompare(b.name); // Сортировка по имени в алфавитном порядке
-          } else {
-            return b.name.localeCompare(a.name); // Сортировка по имени в обратном порядке
-          }
+          return a.name.localeCompare(b.name); // Сортировка по имени в алфавитном порядке
         });
+      },
+    },
+    {
+      width: 300,
+      title: "Регион",
+      value: "region",
+      render: ({ item }) => (
+        <div>
+          <p className="text-[16px] font-extrabold leading-[24px] text-[#3C4858]">
+            {item.country.name}
+          </p>
+          <p className="text-[12px] font-medium leading-[16px] text-[#8492A6]">
+            {item.region.name}
+          </p>
+        </div>
+      ),
+      sort: (items) => {
+        const sortf = (a: Company, b: Company) => {
+          if (a.country > b.country) return 1;
+          if (a.country < b.country) return -1;
+
+          if (a.region > b.region) return 1;
+          if (a.region < b.region) return -1;
+
+          return 0;
+        };
+        return items.sort((a, b) => sortf(a, b));
       },
     },
   ];
@@ -157,28 +182,38 @@ const CompanyList: FC = () => {
       cols={cols}
       list={companies}
       defaultSort="name"
-      onFavorite={(company, value) => setFavorite({ value, id: company.id })}
+      onFavorite={(company, value) => {
+        const comp = companies.find((c) => company.id == c.id)
+        if(comp){
+          setCompanies(
+            companies.map((c) =>
+              c.id === comp.id ? { ...c, isFavorite: value } : c,
+            ),
+          );
+          setFavorite({ value, id: company.id });
+        }
+        
+      }}
     />
   );
 };
 
 const CompanyInfo: FC<{ company: Company }> = ({ company }) => {
-    return (
-      <InfoLayout image={company.image} imageFallBack={company.name[0] ?? "E"}>
-        <div>
-          <p className="text-[16px] font-extrabold leading-[24px] text-[#3C4858]">
-            {company.name}
-          </p>
-        </div>
-      </InfoLayout>
-    );
+  return (
+    <InfoLayout image={company.image} imageFallBack={company.name[0] ?? "E"}>
+      <div>
+        <p className="text-[16px] font-extrabold leading-[24px] text-[#3C4858]">
+          {company.name}
+        </p>
+      </div>
+    </InfoLayout>
+  );
 };
 
-const CompanyFilter : FC = () => {
-    return (
-        <FilterLayout>
-            <>
-            </>
-        </FilterLayout>
-      );
-}
+const CompanyFilter: FC = () => {
+  return (
+    <FilterLayout>
+      <></>
+    </FilterLayout>
+  );
+};
