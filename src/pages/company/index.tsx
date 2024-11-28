@@ -164,13 +164,12 @@ const CompanyList: FC = () => {
       ),
       sort: (items) => {
         const sortf = (a: Company, b: Company) => {
-          if (a.country > b.country) return 1;
-          if (a.country < b.country) return -1;
-
-          if (a.region > b.region) return 1;
-          if (a.region < b.region) return -1;
-
-          return 0;
+          console.log(a.country > b.country)
+          console.log(a.country < b.country)
+          if(a.country === b.country){
+            return a.region.name.localeCompare(b.region.name)
+          }
+          return   a.country.name.localeCompare(b.country.name)
         };
         return items.sort((a, b) => sortf(a, b));
       },
