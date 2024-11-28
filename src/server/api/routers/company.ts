@@ -25,7 +25,7 @@ export const companyRouter = createTRPCRouter({
         });
       }
 
-      const updatedCompany = await ctx.db.employee.update({
+      const updatedCompany = await ctx.db.company.update({
         where: {
           id,
         },
