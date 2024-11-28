@@ -89,7 +89,7 @@ async function main() {
     prisma.company.create({
       data: {
         type: "partner",
-        name: "kaspi",
+        name: "Kaspi",
         description: "Казахстанская экосистема для онлайн-шопинга, платежей и финансовых услуг",
         phone: "+098 765 43 21",
         email: "company2@example.com",
