@@ -43,12 +43,15 @@ export const LoginForm: FC = () => {
     },
   });
 
-  const router = useRouter()
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("error");
+    window.history.replaceState({}, document.title, url.toString());
     const result = await signIn("credentials", {
       username: data.username,
       password: data.password,
@@ -70,7 +73,7 @@ export const LoginForm: FC = () => {
     } else {
       form.clearErrors("root");
       console.log(result.status);
-      router.push('/')
+      router.push("/");
     }
     setIsLoading(false);
   };
@@ -131,7 +134,7 @@ export const LoginForm: FC = () => {
             </FormItem>
           )}
         />
-        <FormMessage className="absolute w-full text-center top-[15px]">
+        <FormMessage className="absolute top-[15px] w-full text-center">
           {form.formState.errors.root?.message}
         </FormMessage>
         <Button
