@@ -6,7 +6,7 @@ export const  convertToPlural = (word: string) => {
         return word.slice(0, -2) + 'ие';
     }
     if (word.endsWith('к')) {
-        return word.slice(0, -2) + 'и';
+        return word + 'и';
     }
     return word + 'ы'
 }
