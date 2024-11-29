@@ -93,7 +93,7 @@ export default function CompaniesPage({ companies }: { companies: Company[] }) {
                   key={index}
                   className="flex gap-[8px]"
                 >
-                  {type == "archive" || type == "other"
+                  {type == "archive" || type == "other" || type == 'myCompanies'
                     ? getCompanyType(type, "ru")
                     : convertToPlural(getCompanyType(type, "ru"))}
                   <div className="rounded-[8px] bg-[#050504] px-[8px] py-[4px] text-center text-[12px] font-normal leading-[16px] tracking-tighter text-white">
